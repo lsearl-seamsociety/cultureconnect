@@ -58,7 +58,7 @@ function Community({ session }: { session: Session }) {
   async function load() {
     setLoading(true);
     const [p, b] = await Promise.all([
-      supabase.from("posts").select("*, profiles(display_name), likes(user_id), saves(user_id), comments(id, body, profiles(display_name))").order("created_at",{ascending:false}).limit(50),
+      supabase.from("posts").select("*, profiles!user_id(display_name), likes(user_id), saves(user_id), comments(id, body, profiles!user_id(display_name))").order("created_at",{ascending:false}).limit(50),
       supabase.from("blocks").select("blocked_id").eq("blocker_id", uid)]);
     if (p.error) setErr(p.error.message); else setPosts(p.data as unknown as Post[]);
     setBlocked((b.data ?? []).map(x => x.blocked_id)); setLoading(false);
