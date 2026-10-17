@@ -1,3 +1,5 @@
+import MemberMap from "./MemberMap";
+import MapSettings from "./MapSettings";
 import { useEffect, useState, FormEvent } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase, configured } from "./lib/supabase";
@@ -115,12 +117,12 @@ function Profile({ session }: { session: Session }) {
     setMsg(r.error ? r.error.message : "Saved.");
   }
   if (!p) return <p>Loading…</p>;
-  return <form onSubmit={save} className="space-y-3 rounded-2xl bg-white p-5"><h2 className="text-xl font-bold">Your profile</h2>
+  return <div className="space-y-4"><form onSubmit={save} className="space-y-3 rounded-2xl bg-white p-5"><h2 className="text-xl font-bold">Your profile</h2>
     <p className="text-sm text-slate-600">Share only what you choose. Nothing is guessed from your location.</p>
     <input name="name" defaultValue={p.display_name} className={input} aria-label="Display name"/><textarea name="bio" defaultValue={p.bio} rows={3} className={input} aria-label="Bio"/>
     <input name="country" defaultValue={p.country ?? ""} placeholder="Country (optional)" className={input}/><input name="langs" defaultValue={p.languages.join(", ")} placeholder="Languages, comma separated" className={input}/>
     <select name="privacy" defaultValue={p.privacy} className={input} aria-label="Privacy"><option value="public">Public</option><option value="members">Members only</option><option value="private">Private</option></select>
-    {msg && <p role="status" className="text-sm">{msg}</p>}<button className={btn}>Save changes</button></form>;
+    {msg && <p role="status" className="text-sm">{msg}</p>}<button className={btn}>Save changes</button></form>   <MapSettings userId={session.user.id}/></div>;
 }
 
 function MapTab() {
