@@ -129,7 +129,8 @@ function MapTab() {
   const [counts, setCounts] = useState<Record<string,number>>({}); const [sel, setSel] = useState(""); const [q, setQ] = useState("");
   useEffect(() => { supabase.from("posts").select("country").then(r => { const c: Record<string,number> = {}; (r.data ?? []).forEach(x => { c[x.country] = (c[x.country]??0)+1; }); setCounts(c); }); }, []);
   const list = Object.keys(counts).filter(c => c.toLowerCase().includes(q.toLowerCase()));
-  return <div className="space-y-3"><div className="rounded-2xl bg-amber-50 p-4 text-sm">The interactive world map is the next build step: add <code>react-simple-maps</code> or MapLibre and use the per-country post counts below as markers. See README.</div>
+    return <div className="space-y-3"><MemberMap/>
+    <h3 className="pt-2 font-bold">Posts by country</h3>
     <input className={input} placeholder="Find a country with posts" value={q} onChange={e=>setQ(e.target.value)} aria-label="Find a country"/>
     <div className="flex flex-wrap gap-2">{list.map(c => <button key={c} onClick={()=>setSel(c)} className="rounded-full border bg-white px-3 py-1">{c} ({counts[c]})</button>)}</div>
     {!list.length && <p>No countries have posts yet.</p>}{sel && <CountryPosts country={sel}/>}</div>;
